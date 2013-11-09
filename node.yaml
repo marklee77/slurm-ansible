@@ -1,0 +1,14 @@
+---
+- name: common setup, install slurm and configuration file
+  hosts: head
+  sudo: True
+  gather_facts: True
+  tasks:
+
+    - name: distribute munge key to nodes
+      fetch: src=tmp/munge.key
+             dest=/etc/munge/munge.key
+             owner=root group=root mode=0400
+
+    - name: restart slurm service
+      service: name=slurm-llnl state=restarted enabled=yes

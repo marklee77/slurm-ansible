@@ -1,0 +1,4 @@
+---
+- include: all.yaml
+- include: head.yaml
+- include: node.yaml

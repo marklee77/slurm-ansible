@@ -1,0 +1,19 @@
+---
+- name: common setup, install slurm and configuration file
+  hosts: all
+  sudo: True
+  gather_facts: True
+  tasks:
+
+    - name: ensure required base packages are present
+      apt: pkg="{{ item }}" state=latest update_cache=yes cache_valid_time=600
+      with_items:
+        - munge
+        - slurm-llnl
+        - slurm-llnl-basic-plugins
+
+    - name: install slurm.conf 
+      template: src=templates/etc/slurm-llnl/slurm.conf 
+                dest=/etc/slurm-llnl/slurm.conf 
+                owner=root group=root mode=0644
+

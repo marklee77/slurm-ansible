@@ -1,0 +1,21 @@
+---
+- name: common setup, install slurm and configuration file
+  hosts: head
+  sudo: True
+  gather_facts: True
+  tasks:
+
+    - name: create munge key
+      command: /usr/bin/create-munge-key
+
+    - name: get munge key for distribution to nodes
+      fetch: src=/etc/munge/munge.key
+             dest=tmp/munge.key
+             fail_on_missing=yes
+             flat=yes
+
+    - name: restart services
+      service: name="{{ item }}" state=restarted enabled=yes
+      with_items:
+        - munge
+        - slurm-llnl
